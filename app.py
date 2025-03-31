@@ -1,9 +1,9 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 import datetime
 
-# Configura tu clave de OpenAI
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Configura tu clave de OpenAI desde los secretos de Streamlit
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Base de conocimiento local (Cádiz)
 zonas_locales = {
@@ -54,7 +54,7 @@ if enviado:
     prompt = generar_prompt(zona, fecha, hora_inicio, hora_fin, modelo, incluir_consejos, parte_manual)
 
     with st.spinner("Generando parte táctico..."):
-        respuesta = openai.ChatCompletion.create(
+        respuesta = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "Eres un meteorólogo experto en regatas inshore."},
